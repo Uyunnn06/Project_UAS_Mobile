@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_expenses"
+        android:icon="@drawable/baseline_money_off_24"
+        android:title="Pengeluaran" />
+
+    <item
+        android:id="@+id/nav_incomes"
+        android:icon="@drawable/baseline_attach_money_24"
+        android:title="Pemasukan" />
+
+    <item
+        android:id="@+id/nav_summary"
+        android:icon="@drawable/baseline_account_balance_wallet_24"
+        android:title="Laporan" />
+
+</menu>
