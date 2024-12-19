@@ -1,5 +1,6 @@
 package com.example.utskelompok;
 
+import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,22 +9,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import java.text.NumberFormat;
 import java.util.Locale;
 
 public class IncomeAdapter extends RecyclerView.Adapter<IncomeAdapter.IncomeViewHolder> {
 
-    private JSONArray incomes;
+    private Cursor cursor;
+
     private String formatCurrency(int amount) {
-        NumberFormat numberFormat = NumberFormat.getInstance(Locale.GERMANY);
+        NumberFormat numberFormat = NumberFormat.getInstance(new Locale("id", "ID"));
         return "Rp " + numberFormat.format(amount);
     }
 
-    public IncomeAdapter(JSONArray incomes) {
-        this.incomes = incomes;
+    public IncomeAdapter(Cursor cursor) {
+        this.cursor = cursor;
     }
 
     @NonNull
@@ -36,33 +35,30 @@ public class IncomeAdapter extends RecyclerView.Adapter<IncomeAdapter.IncomeView
 
     @Override
     public void onBindViewHolder(@NonNull IncomeViewHolder holder, int position) {
-        try {
-            JSONObject income = incomes.getJSONObject(position);
-            holder.descriptionTextView.setText(income.getString("description"));
-
-            // Format amount
-            int amount = income.getInt("amount");
+        if (cursor != null && cursor.moveToPosition(position)) {
+            String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+            int amount = cursor.getInt(cursor.getColumnIndexOrThrow("amount"));
+            String time = cursor.getString(cursor.getColumnIndexOrThrow("time"));
+            holder.descriptionTextView.setText(description);
             holder.amountTextView.setText(formatCurrency(amount));
-
-            holder.timeTextView.setText(income.getString("time"));
-        } catch (JSONException e) {
-            e.printStackTrace();
+            holder.timeTextView.setText(time);
         }
     }
 
     @Override
     public int getItemCount() {
-        return incomes.length();
+        return cursor != null ? cursor.getCount() : 0;
     }
 
     public static class IncomeViewHolder extends RecyclerView.ViewHolder {
         TextView descriptionTextView, amountTextView, timeTextView;
 
-        public IncomeViewHolder(@NonNull View itemView) {
+        public IncomeViewHolder(View itemView) {
             super(itemView);
-            descriptionTextView = itemView.findViewById(R.id.incomeDescription);
-            amountTextView = itemView.findViewById(R.id.incomeAmount);
-            timeTextView = itemView.findViewById(R.id.incomeTime);
+
+            descriptionTextView = itemView.findViewById(R.id.descriptionTextView);
+            amountTextView = itemView.findViewById(R.id.amountTextView);
+            timeTextView = itemView.findViewById(R.id.timeTextView);
         }
     }
 }

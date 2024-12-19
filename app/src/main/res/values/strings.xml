@@ -26,4 +26,16 @@
     <string name="menu_incomes">Pemasukan</string>
     <string name="menu_summary">Ringkasan</string>
 
+        <!-- Array mata uang -->
+        <string-array name="currency_array">
+            <item>USD</item>
+            <item>EUR</item>
+            <item>JPY</item>
+            <item>GBP</item>
+            <item>IDR</item>
+            <item>MYR</item>
+            <item>AUD</item>
+            <item>SGD</item>
+        </string-array>
+
 </resources>

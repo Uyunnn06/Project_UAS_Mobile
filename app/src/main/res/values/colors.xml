@@ -33,5 +33,7 @@
     <color name="buttonBackground">#6200EE</color> <!-- Primary color for buttons -->
 
     <!-- Text for cards and buttons -->
-    <color name="buttonText">#FFFFFF</color> <!-- White for button text -->
+    <color name="buttonText">#FFFFFF</color>
+    <color name="red">#B00020</color>
+    <color name="green">#4CAF50</color> <!-- White for button text -->
 </resources>

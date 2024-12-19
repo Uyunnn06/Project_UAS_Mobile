@@ -2,139 +2,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:elevation="4dp"
-        app:cardCornerRadius="8dp"
-        app:cardBackgroundColor="@color/background">
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:padding="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/summaryTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Laporan Keuangan"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/textPrimary" />
-
-            <!-- Income and Expense Overview -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="16dp"
-                android:weightSum="2">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal">
-
-                    <TextView
-                        android:id="@+id/totalIncomeLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Pemasukan"
-                        android:textSize="14sp"
-                        android:textColor="@color/textPrimary" />
-
-                    <TextView
-                        android:id="@+id/totalIncome"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Rp 0"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/secondary" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal">
-
-                    <TextView
-                        android:id="@+id/totalExpenseLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Pengeluaran"
-                        android:textSize="14sp"
-                        android:textColor="@color/textPrimary" />
-
-                    <TextView
-                        android:id="@+id/totalExpense"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Rp 0"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/error" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <!-- Remaining Balance -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:layout_marginTop="16dp">
-
-                <TextView
-                    android:id="@+id/remainingBalanceLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Saldo Tersisa:"
-                    android:textSize="16sp"
-                    android:textColor="@color/textPrimary" />
-
-                <TextView
-                    android:id="@+id/remainingBalance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Rp 0"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/info"
-                    android:layout_marginStart="8dp" />
-            </LinearLayout>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- Recycler View for Recent Transactions -->
     <TextView
-        android:id="@+id/recentTransactionsLabel"
+        android:id="@+id/totalIncomeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Transaksi Terbaru"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginTop="24dp"
-        android:textColor="@color/textPrimary" />
+        android:text="Total Pemasukan"
+        android:textSize="18sp"
+        android:textColor="#000000" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recentTransactionsRecyclerView"
+    <TextView
+        android:id="@+id/totalExpenseTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Pengeluaran"
+        android:textSize="18sp"
+        android:textColor="#000000" />
+
+    <TextView
+        android:id="@+id/balanceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Saldo"
+        android:textSize="18sp"
+        android:textColor="#FF6347" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="8dp"
-        android:background="@color/background"
-        android:scrollbars="vertical" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/summaryRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"/>
+    </LinearLayout>
+
 
 </LinearLayout>

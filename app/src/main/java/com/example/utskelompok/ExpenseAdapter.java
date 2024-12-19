@@ -8,22 +8,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import java.text.NumberFormat;
-import java.util.Locale;
+import java.util.ArrayList;
 
 public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder> {
 
-    private JSONArray expenses;
-    private String formatCurrency(int amount) {
-        NumberFormat numberFormat = NumberFormat.getInstance(Locale.GERMANY);
-        return "Rp " + numberFormat.format(amount);
+    private final ArrayList<AddExpenseFragment.ExpenseItem> expenseList;
+
+    private String formatAmount(int amount) {
+        return String.valueOf(amount);
     }
 
-    public ExpenseAdapter(JSONArray expenses) {
-        this.expenses = expenses;
+    public ExpenseAdapter(ArrayList<AddExpenseFragment.ExpenseItem> expenseList) {
+        this.expenseList = expenseList;
     }
 
     @NonNull
@@ -36,33 +32,24 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
 
     @Override
     public void onBindViewHolder(@NonNull ExpenseViewHolder holder, int position) {
-        try {
-            JSONObject expense = expenses.getJSONObject(position);
-            holder.descriptionTextView.setText(expense.getString("description"));
-
-            // Format amount
-            int amount = expense.getInt("amount");
-            holder.amountTextView.setText(formatCurrency(amount));
-
-            holder.timeTextView.setText(expense.getString("time"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        AddExpenseFragment.ExpenseItem expense = expenseList.get(position);
+        holder.descriptionTextView.setText(expense.description);
+        holder.amountTextView.setText(formatAmount(expense.amount));
+        holder.timeTextView.setText(expense.time);
     }
 
     @Override
     public int getItemCount() {
-        return expenses.length();
+        return expenseList.size();
     }
-
     public static class ExpenseViewHolder extends RecyclerView.ViewHolder {
         TextView descriptionTextView, amountTextView, timeTextView;
 
-        public ExpenseViewHolder(@NonNull View itemView) {
+        public ExpenseViewHolder(View itemView) {
             super(itemView);
-            descriptionTextView = itemView.findViewById(R.id.expenseDescription);
-            amountTextView = itemView.findViewById(R.id.expenseAmount);
-            timeTextView = itemView.findViewById(R.id.expenseTime);
+            descriptionTextView = itemView.findViewById(R.id.descriptionTextView);
+            amountTextView = itemView.findViewById(R.id.amountTextView);
+            timeTextView = itemView.findViewById(R.id.timeTextView);
         }
     }
 }

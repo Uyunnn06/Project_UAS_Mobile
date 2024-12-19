@@ -3,13 +3,13 @@ package com.example.utskelompok;
 public class Transaction {
     private String description;
     private int amount;
-    private String date;
-    private String type; // income or expense
+    private String time;
+    private String type;
 
-    public Transaction(String description, int amount, String date, String type) {
+    public Transaction(String description, int amount, String time, String type) {
         this.description = description;
         this.amount = amount;
-        this.date = date;
+        this.time = time;
         this.type = type;
     }
 
@@ -17,15 +17,31 @@ public class Transaction {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public int getAmount() {
         return amount;
     }
 
-    public String getDate() {
-        return date;
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public String getType() {
         return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

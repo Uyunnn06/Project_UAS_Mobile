@@ -4,15 +4,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import java.util.List;
+
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Locale;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder> {
 
-    private List<Transaction> transactionList;
+    private final List<Transaction> transactionList;
 
     public TransactionAdapter(List<Transaction> transactionList) {
         this.transactionList = transactionList;
@@ -21,7 +23,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     @NonNull
     @Override
     public TransactionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transaction, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_transaction, parent, false);
         return new TransactionViewHolder(view);
     }
 
@@ -31,13 +34,12 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
         holder.descriptionTextView.setText(transaction.getDescription());
         holder.amountTextView.setText(formatCurrency(transaction.getAmount()));
-        holder.dateTextView.setText(transaction.getDate());
+        holder.timeTextView.setText(transaction.getTime());
 
-        // Color based on transaction type
-        if (transaction.getType().equals("income")) {
-            holder.amountTextView.setTextColor(holder.itemView.getContext().getResources().getColor(android.R.color.holo_green_dark));
+        if (transaction.getType().equals("expense")) {
+            holder.amountTextView.setTextColor(holder.itemView.getContext().getResources().getColor(R.color.red));
         } else {
-            holder.amountTextView.setTextColor(holder.itemView.getContext().getResources().getColor(android.R.color.holo_red_dark));
+            holder.amountTextView.setTextColor(holder.itemView.getContext().getResources().getColor(R.color.green));
         }
     }
 
@@ -47,19 +49,18 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     }
 
     private String formatCurrency(int amount) {
-        // Format as Indonesian Rupiah
-        NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
-        return formatter.format(amount);
+        NumberFormat numberFormat = NumberFormat.getInstance(Locale.GERMANY);
+        return "Rp " + numberFormat.format(amount);
     }
 
     public static class TransactionViewHolder extends RecyclerView.ViewHolder {
-        TextView descriptionTextView, amountTextView, dateTextView;
+        TextView descriptionTextView, amountTextView, timeTextView;
 
-        public TransactionViewHolder(@NonNull View itemView) {
+        public TransactionViewHolder(View itemView) {
             super(itemView);
-            descriptionTextView = itemView.findViewById(R.id.transactionDescription);
-            amountTextView = itemView.findViewById(R.id.transactionAmount);
-            dateTextView = itemView.findViewById(R.id.transactionDate);
+            descriptionTextView = itemView.findViewById(R.id.descriptionTextView);
+            amountTextView = itemView.findViewById(R.id.amountTextView);
+            timeTextView = itemView.findViewById(R.id.timeTextView);
         }
     }
 }

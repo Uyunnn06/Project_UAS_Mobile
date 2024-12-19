@@ -38,7 +38,13 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation (libs.material.v190)
+    implementation(libs.recyclerview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation ("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation ("androidx.recyclerview:recyclerview:1.3.0")
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.squareup.okhttp3:okhttp:4.9.0")
 }

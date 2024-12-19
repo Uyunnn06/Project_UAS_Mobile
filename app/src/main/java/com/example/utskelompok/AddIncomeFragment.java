@@ -1,7 +1,10 @@
 package com.example.utskelompok;
 
+import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,10 +16,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -26,6 +25,8 @@ public class AddIncomeFragment extends Fragment {
     private EditText descriptionEditText, amountEditText;
     private Button saveButton;
     private RecyclerView incomeRecyclerView;
+
+    private SQLiteOpenHelper dbHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,7 +38,26 @@ public class AddIncomeFragment extends Fragment {
         saveButton = view.findViewById(R.id.saveIncomeButton);
         incomeRecyclerView = view.findViewById(R.id.incomeRecyclerView);
 
-        // Setup RecyclerView
+        dbHelper = new SQLiteOpenHelper(getContext(), "budget_smart.db", null, 3) {  // Increased database version
+            @Override
+            public void onCreate(SQLiteDatabase db) {
+                String CREATE_TABLE_INCOME = "CREATE TABLE income_table (" +
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "description TEXT, " +
+                        "amount INTEGER, " +
+                        "time TEXT)";
+                db.execSQL(CREATE_TABLE_INCOME);
+            }
+
+            @Override
+            public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+                if (oldVersion < 2) {
+                    db.execSQL("DROP TABLE IF EXISTS income_table");
+                    onCreate(db);
+                }
+            }
+        };
+
         incomeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         loadIncomeHistory();
 
@@ -48,26 +68,13 @@ public class AddIncomeFragment extends Fragment {
             if (!description.isEmpty() && !amountText.isEmpty()) {
                 try {
                     int amount = Integer.parseInt(amountText);
-                    addIncomeToSharedPreferences(description, amount);
+                    addIncomeToDatabase(description, amount);
                     Toast.makeText(getActivity(), "Pemasukan berhasil ditambahkan!", Toast.LENGTH_SHORT).show();
 
-                    // Clear input fields
                     descriptionEditText.setText("");
                     amountEditText.setText("");
 
-                    // Reload data
                     loadIncomeHistory();
-
-                    // Memperbarui ringkasan setelah menambahkan pemasukan
-                    if (getActivity() != null) {
-                        SummaryFragment summaryFragment = (SummaryFragment) getActivity()
-                                .getSupportFragmentManager()
-                                .findFragmentByTag(SummaryFragment.class.getSimpleName());
-
-                        if (summaryFragment != null) {
-                            summaryFragment.loadSummary(); // Memanggil ulang loadSummary untuk memperbarui ringkasan
-                        }
-                    }
 
                 } catch (NumberFormatException e) {
                     Toast.makeText(getActivity(), "Jumlah harus berupa angka!", Toast.LENGTH_SHORT).show();
@@ -80,42 +87,23 @@ public class AddIncomeFragment extends Fragment {
         return view;
     }
 
-    private void addIncomeToSharedPreferences(String description, int amount) {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("BudgetSmart", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+    private void addIncomeToDatabase(String description, int amount) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
 
-        String existingIncomes = sharedPreferences.getString("incomes", "[]");
-        try {
-            JSONArray incomesArray = new JSONArray(existingIncomes);
+        ContentValues values = new ContentValues();
+        values.put("description", description);
+        values.put("amount", amount);
+        values.put("time", currentTime);
 
-            JSONObject incomeObject = new JSONObject();
-            incomeObject.put("description", description);
-            incomeObject.put("amount", amount);
-
-            // Add current time
-            String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
-            incomeObject.put("time", currentTime);
-
-            incomesArray.put(incomeObject);
-            editor.putString("incomes", incomesArray.toString());
-            editor.apply();
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        db.insert("income_table", null, values);
     }
 
     private void loadIncomeHistory() {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("BudgetSmart", Context.MODE_PRIVATE);
-        String existingIncomes = sharedPreferences.getString("incomes", "[]");
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM income_table ORDER BY time DESC", null);
 
-        try {
-            JSONArray incomesArray = new JSONArray(existingIncomes);
-            IncomeAdapter adapter = new IncomeAdapter(incomesArray);
-            incomeRecyclerView.setAdapter(adapter);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        IncomeAdapter adapter = new IncomeAdapter(cursor);
+        incomeRecyclerView.setAdapter(adapter);
     }
 }
