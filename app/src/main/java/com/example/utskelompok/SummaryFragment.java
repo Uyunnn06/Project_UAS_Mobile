@@ -38,7 +38,7 @@ public class SummaryFragment extends Fragment {
 
         summaryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        dbHelper = new SQLiteOpenHelper(getContext(), "budget_smart.db", null, 3) {  // Increased database version to 2
+        dbHelper = new SQLiteOpenHelper(getContext(), "budget_smart.db", null, 4) {  // Increased database version to 2
             @Override
             public void onCreate(SQLiteDatabase db) {
                 String CREATE_TABLE_INCOME = "CREATE TABLE IF NOT EXISTS income_table ("

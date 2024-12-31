@@ -39,7 +39,7 @@ public class AddExpenseFragment extends Fragment {
         saveButton = view.findViewById(R.id.saveExpenseButton);
         expenseRecyclerView = view.findViewById(R.id.expenseRecyclerView);
 
-        SQLiteOpenHelper dbHelper = new SQLiteOpenHelper(getContext(), "budget_smart.db", null, 3) {
+        SQLiteOpenHelper dbHelper = new SQLiteOpenHelper(getContext(), "budget_smart.db", null, 4) {
             @Override
             public void onCreate(SQLiteDatabase db) {
                 String CREATE_TABLE_EXPENSE = "CREATE TABLE IF NOT EXISTS expense_table (" +
